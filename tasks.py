@@ -122,7 +122,7 @@ def scp(archive):
 
 @task
 def unzip_remote(password):
-    command = "sudo -S unzip -o " + bundle_name + ".bundle.zip -d " + unix_plugins_dir
+    command = "sudo -S unzip -o " + bundle_name + ".zip -d " + unix_plugins_dir
 
     execute_remote_command(command, hostname, username, password)
 
