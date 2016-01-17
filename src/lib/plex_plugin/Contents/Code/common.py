@@ -1,5 +1,10 @@
 from datetime import date
 
+import albums
+import artists
+import collections
+import audio_tracks
+
 @route('/video/music/search_music')
 def SearchMusic(query=None, page=1, **params):
     page = int(page)
@@ -12,7 +17,7 @@ def SearchMusic(query=None, page=1, **params):
 
     if count1:
         oc.add(DirectoryObject(
-            key=Callback(music_collections.SearchMusicCollections, title=L('Collections'), query=query, page=page),
+            key=Callback(collections.SearchMusicCollections, title=L('Collections'), query=query, page=page),
             title=unicode(L('Collections') + " (" + str(count1) + ")")
         ))
 
@@ -20,7 +25,7 @@ def SearchMusic(query=None, page=1, **params):
 
     if count2:
         oc.add(DirectoryObject(
-            key=Callback(music_artists.SearchMusicArtists, type='artist_annotated', title=L('Artists'), query=query, page=page),
+            key=Callback(artists.SearchMusicArtists, type='artist_annotated', title=L('Artists'), query=query, page=page),
             title=unicode(L('Artists') + " (" + str(count2) + ")")
         ))
 
@@ -28,7 +33,7 @@ def SearchMusic(query=None, page=1, **params):
 
     if count3:
         oc.add(DirectoryObject(
-            key=Callback(music_albums.SearchMusicAlbums, title=L('Albums'), query=query, page=page),
+            key=Callback(albums.SearchMusicAlbums, title=L('Albums'), query=query, page=page),
             title=unicode(L('Albums') + " (" + str(count3) + ")")
         ))
 
@@ -36,7 +41,7 @@ def SearchMusic(query=None, page=1, **params):
 
     if count4:
         oc.add(DirectoryObject(
-            key=Callback(music_audio_tracks.SearchMusicAudioTracks, title=L('Audio Tracks'), query=query, page=page),
+            key=Callback(audio_tracks.SearchMusicAudioTracks, title=L('Audio Tracks'), query=query, page=page),
             title=unicode(L('Audio Tracks') + " (" + str(count4) + ")")
         ))
 
