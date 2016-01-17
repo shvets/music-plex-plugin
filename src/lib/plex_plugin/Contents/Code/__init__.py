@@ -32,10 +32,7 @@ def Start(): # Initialize the plug-in
 def MainMenu(complete=False, offline=False):
     oc = ObjectContainer(title1='Muzarbuz', art=R(ART))
 
-
-    #oc.http_cookies = HTTP.CookiesForURL(video_service.API_URL)
-
-    # oc.add(DirectoryObject(key=Callback(music.GetMusicMenu), title=unicode(L('Music'))))
+    oc.http_cookies = HTTP.CookiesForURL(music_service.API_URL)
 
     oc = ObjectContainer(title2=unicode(L('Music')))
 
@@ -45,7 +42,5 @@ def MainMenu(complete=False, offline=False):
     oc.add(DirectoryObject(key=Callback(genres.GetGenresMenu, title=L('Genres')), title=unicode(L('Genres'))))
 
     common.add_search_music(oc)
-
-    #oc.add(InputDirectoryObject(key=Callback(archive.SearchMovies), title=unicode(L("Movies Search")), thumb=R(SEARCH_ICON)))
 
     return oc
