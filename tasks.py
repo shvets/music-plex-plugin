@@ -14,11 +14,11 @@ if 'HOSTNAME' in os.environ:
 else:
     hostname = '10.0.1.37'
 
-plugin_name = 'music'
+plugin_name = 'muzarbuz'
 bundle_name = 'Muzarbuz.bundle'
 archive = bundle_name + '.zip'
 
-def dest_root(os):hange defaults
+def dest_root(os):
     if os == 'Darwin':
         return '~'
     else:
