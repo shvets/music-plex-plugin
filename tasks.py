@@ -14,11 +14,11 @@ if 'HOSTNAME' in os.environ:
 else:
     hostname = '10.0.1.37'
 
-src = 'src/lib'
+plugin_name = 'music'
 bundle_name = 'Muzarbuz.bundle'
 archive = bundle_name + '.zip'
 
-def dest_root(os):
+def dest_root(os):hange defaults
     if os == 'Darwin':
         return '~'
     else:
@@ -54,9 +54,9 @@ def test(script):
 
 @task
 def reset():
-    run("rm -rf " + plex_home + "/Plug-in\ Support/Caches/com.plexapp.plugins.muzarbuz")
-    run("rm -rf " + plex_home + "/Plug-in\ Support/Data/com.plexapp.plugins.muzarbuz")
-    run("rm -rf " + plex_home + "/Plug-in\ Support/Preferences/com.plexapp.plugins.muzarbuz.xml")
+    run("rm -rf " + plex_home + "/Plug-in\ Support/Caches/com.plexapp.plugins." + plugin_name)
+    run("rm -rf " + plex_home + "/Plug-in\ Support/Data/com.plexapp.plugins." + plugin_name)
+    run("rm -rf " + plex_home + "/Plug-in\ Support/Preferences/com.plexapp.plugins." + plugin_name + ".xml")
     # run("rm -rf " + plugin_dir)
 
     print("Plugin was reset.")
@@ -66,10 +66,9 @@ def copy(plugin_dir):
     run("mkdir -p " + plugin_dir + "/Contents/Code")
     run("mkdir -p " + plugin_dir + "/Contents/Services/Shared\ Code")
 
-    run("cp -R " + src + "/music/*.py " + plugin_dir + "/Contents/Code")
-    run("cp -R " + src + "/common/*.py " + plugin_dir + "/Contents/Code")
-    run("cp -R " + src + "/plex_plugin/Contents " + plugin_dir)
-    #run("cp " + "music.config " + plugin_dir + "/Contents")
+    run("cp -R src/lib/music/*.py " + plugin_dir + "/Contents/Code")
+    run("cp -R src/lib/common/*.py " + plugin_dir + "/Contents/Code")
+    run("cp -R src/lib/plex_plugin/Contents " + plugin_dir)
 
     print("Files were copied.")
 
@@ -82,7 +81,7 @@ def reload():
 
     print("Server was restarted.")
 
-    run("tail -f ~/Library/Logs/PMS\ Plugin\ Logs/com.plexapp.plugins.muzarbuz.log")
+    run("tail -f ~/Library/Logs/PMS\ Plugin\ Logs/com.plexapp.plugins." + plugin_name + ".log")
 
 @task
 def deploy():
@@ -104,9 +103,9 @@ def pip():
 @task
 def reset_remote(password):
     command = """
-        sudo -S rm -rf {plex_home}/Plug-in\ Support/Caches/com.plexapp.plugins.music
-        sudo -S rm -rf {plex_home}/Plug-in\ Support/Data/com.plexapp.plugins.music
-        sudo -S rm -rf {plex_home}/Plug-in\ Support/Preferences/com.plexapp.plugins.music.xml
+        sudo -S rm -rf {plex_home}/Plug-in\ Support/Caches/com.plexapp.plugins.{plugin_name}
+        sudo -S rm -rf {plex_home}/Plug-in\ Support/Data/com.plexapp.plugins.{plugin_name}
+        sudo -S rm -rf {plex_home}/Plug-in\ Support/Preferences/com.plexapp.plugins.{plugin_name}.xml
         sudo -S rm -rf {plex_home}/Plug-ins\{bundle_name}/Contents/Code
         # sudo -S rm -rf {plex_home}/Plug-ins\{bundle_name}/Contents/Resources
         # sudo -S rm -rf {plex_home}/Plug-ins\{bundle_name}/Contents/Services
@@ -115,7 +114,7 @@ def reset_remote(password):
         # sudo -S rm -f {plex_home}/Plug-ins\{bundle_name}/Contents/Info.plist
 
         echo "Plugin was reset.".
-    """.format(plex_home=unix_plex_home, plugin_dir=unix_plugin_dir, bundle_name=bundle_name)
+    """.format(plex_home=unix_plex_home, plugin_dir=unix_plugin_dir, bundle_name=bundle_name, plugin_name=plugin_name)
 
     execute_remote_command(command, hostname, username, password)
 
@@ -139,7 +138,7 @@ def restart_remote(password):
         sudo -S service plexmediaserver restart
 
         echo "Server was restarted."
-    """.format(plugin_dir=unix_plugin_dir, src=src)
+    """
 
     execute_remote_command(command, hostname, username, password)
 
@@ -171,15 +170,6 @@ def rdeploy():
     password = get_password(hostname, username)
 
     build()
-
-    # command = "sudo -S rm -rf " + unix_plugin_dir + "/Contents/Code"
-    #
-    # execute_remote_command(command, hostname, username, password)
-    #
-    # command = "sudo -S rm -f " + "~/" + bundle_name + ".zip"
-    #
-    # execute_remote_command(command, hostname, username, password)
-
     scp(archive)
 
     reset_remote(password)

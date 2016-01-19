@@ -13,7 +13,7 @@
         "id": "elements_per_page",
         "type": "enum",
         "label": "Items per page",
-        "default": "25",
+        "default": "50",
         "values": [
             "10",
             "15",
