@@ -4,7 +4,7 @@ import pagination
 import artists
 import audio_tracks
 
-@route('/video/music/collections_menu')
+@route('/music/music/collections_menu')
 def GetCollectionsMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -21,7 +21,7 @@ def GetCollectionsMenu(title):
 
     return oc
 
-@route('/video/music/collections')
+@route('/music/music/collections')
 def HandleCollections(title, page=1, **params):
     oc = ObjectContainer()
 
@@ -29,7 +29,7 @@ def HandleCollections(title, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.get_collections(limit=limit, offset=offset)
+    response = service.get_collections(limit=limit, offset=offset)
 
     oc.title2 = unicode(L('Collections')) + ' (' + str(response['meta']['total_count']) + ')'
 
@@ -48,7 +48,7 @@ def HandleCollections(title, page=1, **params):
 
     return oc
 
-@route('/video/music/collection')
+@route('/music/music/collection')
 def HandleCollection(title, collection__id, thumb):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -59,7 +59,7 @@ def HandleCollection(title, collection__id, thumb):
 
     return oc
 
-@route('/video/music/search_music_collections')
+@route('/music/music/search_music_collections')
 def SearchMusicCollections(title, query, page=1, **params):
     page = int(page)
     limit = common.get_elements_per_page()
@@ -67,7 +67,7 @@ def SearchMusicCollections(title, query, page=1, **params):
 
     oc = ObjectContainer(title2=unicode(L(title)))
 
-    response = music_service.search_collection(q=query, limit=common.get_elements_per_page(), offset=offset)
+    response = service.search_collection(q=query, limit=common.get_elements_per_page(), offset=offset)
 
     for media in artists.BuildArtistsList(response['objects']):
         oc.add(media)

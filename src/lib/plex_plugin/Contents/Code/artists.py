@@ -12,7 +12,7 @@ CYRILLIC_LETTERS = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 
 LATIN_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                  'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-@route('/video/music/artists_menu')
+@route('/music/music/artists_menu')
 def GetArtistsMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -37,7 +37,7 @@ def GetArtistsMenu(title):
 
     return oc
 
-@route('/video/music/cyrillic_letters_menu')
+@route('/music/music/cyrillic_letters_menu')
 def GetCyrillicLettersMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -48,7 +48,7 @@ def GetCyrillicLettersMenu(title):
 
     return oc
 
-@route('/video/music/latin_letters_menu')
+@route('/music/music/latin_letters_menu')
 def GetLatinLettersMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -59,7 +59,7 @@ def GetLatinLettersMenu(title):
 
     return oc
 
-@route('/video/music/letter')
+@route('/music/music/letter')
 def HandleLetter(title, page=1, **params):
     oc = ObjectContainer(title2=unicode(title))
 
@@ -67,7 +67,7 @@ def HandleLetter(title, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.get_artist_annotated(limit=limit, offset=offset, **params)
+    response = service.get_artist_annotated(limit=limit, offset=offset, **params)
 
     for artist in BuildArtistsList(response['objects']):
         oc.add(artist)
@@ -79,7 +79,7 @@ def HandleLetter(title, page=1, **params):
 
     return oc
 
-@route('/video/music/search_music_artists')
+@route('/music/music/search_music_artists')
 def SearchMusicArtists(title, query, page, **params):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -87,7 +87,7 @@ def SearchMusicArtists(title, query, page, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.search_artist_annotated(q=query, limit=common.get_elements_per_page(), offset=offset)
+    response = service.search_artist_annotated(q=query, limit=common.get_elements_per_page(), offset=offset)
 
     for artist in BuildArtistsList(response['objects']):
         oc.add(artist)
@@ -97,7 +97,7 @@ def SearchMusicArtists(title, query, page, **params):
 
     return oc
 
-@route('/video/music/artists')
+@route('/music/music/artists')
 def HandleArtists(title, page=1, **params):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -105,7 +105,7 @@ def HandleArtists(title, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.get_artists(limit=limit, offset=offset, **params)
+    response = service.get_artists(limit=limit, offset=offset, **params)
 
     oc.title2 = unicode(L(title)) + ' (' + str(response['meta']['total_count']) + ')'
 
@@ -135,11 +135,11 @@ def BuildArtistsList(response):
 
     return list
 
-@route('/video/music/artist_menu')
+@route('/music/music/artist_menu')
 def GetArtistMenu(id, title, thumb, **params):
     oc = ObjectContainer(title2=unicode(L("Artist") + " " + title))
 
-    response1 = music_service.get_albums(artists=id, limit=1, offset=0,
+    response1 = service.get_albums(artists=id, limit=1, offset=0,
                                          year__gte=common.get_start_music_year(),
                                          year__lte=common.get_end_music_year())
     count1 = int(response1['meta']['total_count'])
@@ -151,7 +151,7 @@ def GetArtistMenu(id, title, thumb, **params):
             thumb=thumb
         ))
 
-    response2 = music_service.get_tracks(artists=id, limit=1, offset=0,
+    response2 = service.get_tracks(artists=id, limit=1, offset=0,
                                          year__gte=common.get_start_music_year(),
                                          year__lte=common.get_end_music_year())
     count2 = int(response2['meta']['total_count'])

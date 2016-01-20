@@ -3,7 +3,7 @@ import pagination
 import music_queue
 import audio_tracks
 
-@route('/video/music/albums_menu')
+@route('/music/music/albums_menu')
 def GetAlbumsMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -26,7 +26,7 @@ def GetAlbumsMenu(title):
 
     return oc
 
-@route('/video/music/search_music_albums')
+@route('/music/music/search_music_albums')
 def SearchMusicAlbums(title, query, page=1, **params):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -34,7 +34,7 @@ def SearchMusicAlbums(title, query, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.search_album(q=query, limit=common.get_elements_per_page(), offset=offset)
+    response = service.search_album(q=query, limit=common.get_elements_per_page(), offset=offset)
 
     for media in BuildAlbumsList(response['objects']):
         oc.add(media)
@@ -44,7 +44,7 @@ def SearchMusicAlbums(title, query, page=1, **params):
 
     return oc
 
-@route('/video/music/albums')
+@route('/music/music/albums')
 def HandleAlbums(title, page=1, **params):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -52,7 +52,7 @@ def HandleAlbums(title, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.get_albums(limit=limit, offset=offset,
+    response = service.get_albums(limit=limit, offset=offset,
                                         year__gte=common.get_start_music_year(),
                                         year__lte=common.get_end_music_year(),
                                         **params)
@@ -97,11 +97,11 @@ def BuildAlbumsList(response, **params):
 
     return list
 
-@route('/video/music/double_album')
+@route('/music/music/double_album')
 def HandleDoubleAlbum(name, thumb, **params):
     oc = ObjectContainer(title2=unicode(name))
 
-    response = music_service.get_albums(limit=common.get_elements_per_page(),
+    response = service.get_albums(limit=common.get_elements_per_page(),
                                         year__gte=common.get_start_music_year(),
                                         year__lte=common.get_end_music_year(),
                                         **params)

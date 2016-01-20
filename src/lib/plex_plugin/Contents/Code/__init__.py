@@ -14,7 +14,7 @@ def on_error(e):
 
     return ObjectContainer(header='Results', message=unicode(e))
 
-music_service = PlexMusicService(on_error)
+service = PlexMusicService(on_error)
 
 import common
 import albums
@@ -28,11 +28,11 @@ def Start(): # Initialize the plug-in
 
     common.validate_prefs()
 
-@handler('/video/music', 'Muzarbuz', thumb=ICON, art=ART)
+@handler('/music/music', 'Muzarbuz', thumb=ICON, art=ART)
 def MainMenu(complete=False, offline=False):
     oc = ObjectContainer(title1='Muzarbuz', art=R(ART))
 
-    oc.http_cookies = HTTP.CookiesForURL(music_service.API_URL)
+    oc.http_cookies = HTTP.CookiesForURL(service.API_URL)
 
     oc = ObjectContainer(title2=unicode(L('Music')))
 

@@ -2,7 +2,7 @@ import common
 import music_queue
 import pagination
 
-@route('/video/music/search_music_audio_tracks')
+@route('/music/music/search_music_audio_tracks')
 def SearchMusicAudioTracks(title, query, page, **params):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -10,7 +10,7 @@ def SearchMusicAudioTracks(title, query, page, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.search_audio_track(q=query, limit=common.get_elements_per_page(), offset=offset)
+    response = service.search_audio_track(q=query, limit=common.get_elements_per_page(), offset=offset)
 
     for media in response['objects']:
         title = media['title']
@@ -22,7 +22,7 @@ def SearchMusicAudioTracks(title, query, page, **params):
             artist = ''
 
         format = 'mp3'
-        url = music_service.BASE_URL + file
+        url = service.BASE_URL + file
 
         oc.add(GetAudioTrack(title=unicode(title), thumb=thumb, artist=artist, format=format, url=url))
 
@@ -31,7 +31,7 @@ def SearchMusicAudioTracks(title, query, page, **params):
 
     return oc
 
-@route('/video/music/audio_tracks')
+@route('/music/music/audio_tracks')
 def HandleAudioTracks(name, thumb, page=1, **params):
     oc = ObjectContainer(title2=unicode(name))
 
@@ -39,7 +39,7 @@ def HandleAudioTracks(name, thumb, page=1, **params):
     limit = common.get_elements_per_page()
     offset = (page-1)*limit
 
-    response = music_service.get_tracks(limit=common.get_elements_per_page(), offset=offset, **params)
+    response = service.get_tracks(limit=common.get_elements_per_page(), offset=offset, **params)
 
     for media in response['objects']:
         title = media['title']
@@ -51,7 +51,7 @@ def HandleAudioTracks(name, thumb, page=1, **params):
             artist = ''
 
         format = 'mp3'
-        url = music_service.BASE_URL + file
+        url = service.BASE_URL + file
 
         oc.add(GetAudioTrack(title=unicode(title), thumb=thumb, artist=artist, format=format, url=url))
 
@@ -62,7 +62,7 @@ def HandleAudioTracks(name, thumb, page=1, **params):
 
     return oc
 
-@route('/video/music/audio_track')
+@route('/music/music/audio_track')
 def GetAudioTrack(title, thumb, artist, format, url, container=False, **params):
     track = MetadataObjectForURL(title=title, thumb=thumb, artist=artist, format=format, url=url, container=container)
 
@@ -116,7 +116,7 @@ def MediaObjectsForURL(url, format):
 
     return media_objects
 
-@route('/video/music/play_audio')
+@route('/music/music/play_audio')
 def PlayMusic(url):
     Log(url)
 

@@ -2,7 +2,7 @@ import common
 import music_queue
 import albums
 
-@route('/video/music/genres_menu')
+@route('/music/music/genres_menu')
 def GetGenresMenu(title):
     oc = ObjectContainer(title2=unicode(L(title)))
 
@@ -20,11 +20,11 @@ def GetGenresMenu(title):
 
     return oc
 
-@route('/video/music/music_genres')
+@route('/music/music/music_genres')
 def HandleMusicGenres(title):
     oc = ObjectContainer()
 
-    response = music_service.get_genres(limit=0)
+    response = service.get_genres(limit=0)
     count = response['meta']['total_count']
 
     oc.title2 = unicode(L(title)) + ' (' + str(count) + ')'
@@ -41,7 +41,7 @@ def HandleMusicGenres(title):
 
     return oc
 
-@route('/video/music/music_genre')
+@route('/music/music/music_genre')
 def HandleMusicGenre(title, genre__in, thumb):
     oc = ObjectContainer(title2=unicode(L(title)))
 

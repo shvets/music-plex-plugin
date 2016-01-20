@@ -21,41 +21,41 @@ def append_controls(oc, name, thumb=None, **params):
                 thumb=R(ADD_ICON)
         ))
 
-@route('/video/music/add_to_queue')
+@route('/music/music/add_to_queue')
 def HandleAddToQueue(name, thumb, **params):
     type = get_type(params)
     id = params[type]
 
     music_info = MusicInfo(type=type, id=id, name=name, thumb=thumb)
 
-    music_service.music_queue.add(music_info)
-    music_service.music_queue.save()
+    service.music_queue.add(music_info)
+    service.music_queue.save()
 
     return ObjectContainer(
         header=u'%s' % L(name),
         message=u'%s' % L('Media Added')
     )
 
-@route('/video/music/remove_from_queue')
+@route('/music/music/remove_from_queue')
 def HandleRemoveFromQueue(name, thumb, **params):
     type = get_type(params)
     id = params[type]
 
     music_info = MusicInfo(type=type, id=id, name=name, thumb=thumb)
 
-    music_service.music_queue.remove(music_info)
-    music_service.music_queue.save()
+    service.music_queue.remove(music_info)
+    service.music_queue.save()
 
     return ObjectContainer(
         header=u'%s' % L(name),
         message=u'%s' % L('Media Removed')
     )
 
-@route('/video/music/queue')
+@route('/music/music/queue')
 def GetQueue(title, filter=None):
     oc = ObjectContainer(title2=unicode(L(title)))
 
-    for media in music_service.music_queue.data:
+    for media in service.music_queue.data:
         type = media['type']
 
         if type == filter:
@@ -112,7 +112,7 @@ def get_type(params):
 def item_already_added_to_storage(type, id):
     added = False
 
-    for media in music_service.music_queue.data:
+    for media in service.music_queue.data:
         if id == media['id']:
             added = True
             break

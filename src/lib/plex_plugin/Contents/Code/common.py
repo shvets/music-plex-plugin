@@ -5,13 +5,13 @@ import artists
 import collections
 import audio_tracks
 
-@route('/video/music/search_music')
+@route('/music/music/search_music')
 def SearchMusic(query=None, page=1, **params):
     page = int(page)
 
     oc = ObjectContainer(title2=unicode(L('Music Search')))
 
-    response = music_service.search(q=query, limit=1, offset=0)
+    response = service.search(q=query, limit=1, offset=0)
 
     count1 = response['collection']['meta']['total_count']
 
